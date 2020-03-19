@@ -5,10 +5,18 @@ ini_set('display_errors', 1);
 
 echo "Items: <br>";
 
-$key = '7z79P78iX4byW7n01wG3SSooB4yTLH9';
+$key = '1DPu87IxL9iT5ur3l8CJ4M1xp80jMVi';
 $items = [
   [
     'classid' => 310778280,
+    'instanceid' => 0
+  ],
+  [
+    'classid' => 520025252,
+    'instanceid' => 0
+  ],
+  [
+    'classid' => 1432174707,
     'instanceid' => 0
   ],
 ];
@@ -28,7 +36,9 @@ function prettyArrayPrint($array) {
   echo "</pre>";
 }
 
-foreach ($items as $v) {
+// foreach ($items as $v) {
+
+  $v = $items[2];
 
   $link = "https://market.csgo.com/api/ItemInfo/{$v['classid']}_{$v['instanceid']}/ru/?key=$key";
   // echo "$link<br>";
@@ -38,11 +48,14 @@ foreach ($items as $v) {
   // curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
   // curl_setopt($curl_handle, CURLOPT_USERAGENT, 'Mozilla Firefox');
   // $info = curl_exec($curl_handle);
-  
+
   $answer = callToApi($link);
-  // prettyArrayPrint($answer);
-  echo "Предмет: {$answer['market_name']}, редкость: {$answer['rarity']}, тип: {$answer['type']}, мин. цена: {$answer['min_price']}";
+
+  echo "Предмет: {$answer['market_name']}, {$answer['market_hash_name']}, редкость: {$answer['rarity']}, тип: {$answer['type']}, мин. цена: {$answer['min_price']}";
   echo "<br><br>";
+  $price = $answer['min_price'];
+  $hash_name = $answer['market_hash_name'];
+  // echo "Hash: <b>{$answer['market_hash_name']}</b>";
 
   $link = "https://market.csgo.com/api/ItemHistory/{$v['classid']}_{$v['instanceid']}/?key=$key";
   $answer = callToApi($link);
@@ -58,5 +71,23 @@ foreach ($items as $v) {
   $answer = callToApi($link);
   echo "Лучшая цена: <b>{$answer['best_offer']}</b>";
 
+  echo "_____________________{$price}";
+
+  echo "<br><br>";
+
   echo "<hr>";
-}
+// }
+  echo "<br>";
+
+  $link = "https://market.csgo.com/api/v2/buy-for?key=$key&hash_name={$hash_name}&price={$price}&partner=180109884&token=xoDtndTM";
+  // $link = "https://market.csgo.com/api/v2/buy-for?key=$key&hash_name={$hash_name}&price={$price}&partner=109286706&token=fjpCxsuB";
+
+  // Расим
+
+  // 109286706
+
+  // fjpCxsuB
+
+  $answer = callToApi($link);
+
+  print_r($answer);
